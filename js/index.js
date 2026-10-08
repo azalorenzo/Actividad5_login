@@ -1,16 +1,8 @@
-// ============================================================================
-// index.js — lógica de la pantalla "dentro" del sistema.
-// Depende de utileria.js (debe cargarse antes que este archivo en index.html).
-// ============================================================================
-
-/* --------------------------- sesión / usuario en el navbar --------------------------- */
-
 const usuario = localStorage.getItem("usuario");
 
 if (usuario) {
   document.getElementById("usuarioNavbar").textContent = usuario;
 } else {
-  // Sin sesión iniciada: regresa al login.
   window.location.href = "login.html";
 }
 
@@ -19,8 +11,6 @@ function cerrarSesion() {
   window.location.href = "login.html";
 }
 
-/* -------------------------------- sidebar: abrir/cerrar -------------------------------- */
-
 const btnMenu = document.getElementById("btnMenu");
 
 btnMenu.addEventListener("click", () => {
@@ -28,12 +18,9 @@ btnMenu.addEventListener("click", () => {
   btnMenu.setAttribute("aria-expanded", String(!cerrada));
 });
 
-// En pantallas angostas, que la sidebar empiece cerrada.
 if (window.matchMedia("(max-width: 768px)").matches) {
   document.body.classList.add("sidebar-cerrada");
 }
-
-/* -------------------------------- cambiar de vista -------------------------------- */
 
 const enlacesVista = document.querySelectorAll(".enlace-vista");
 const vistas = document.querySelectorAll(".vista");
@@ -51,19 +38,28 @@ enlacesVista.forEach((enlace) => {
   enlace.addEventListener("click", (e) => {
     e.preventDefault();
     mostrarVista(enlace.dataset.vista);
-    // En móvil, cerrar la sidebar al elegir una opción.
     if (window.matchMedia("(max-width: 768px)").matches) {
       document.body.classList.add("sidebar-cerrada");
     }
   });
 });
 
-/* ===================================================================== */
-/*  Usuarios > Captura — validada con validarCorreo() y validarPassword() */
-/* ===================================================================== */
-
 const formCaptura = document.getElementById("formCaptura");
 const tablaUsuarios = document.querySelector("#tablaUsuarios tbody");
+
+function agregarFilaUsuario(nombre, correo) {
+  const fila = document.createElement("tr");
+  const tdNombre = document.createElement("td");
+  const tdCorreo = document.createElement("td");
+  tdNombre.textContent = nombre;
+  tdCorreo.textContent = correo;
+  fila.append(tdNombre, tdCorreo);
+  tablaUsuarios.appendChild(fila);
+}
+
+(JSON.parse(localStorage.getItem("usuarios")) || []).forEach((u) =>
+  agregarFilaUsuario(u.nombre, u.correo)
+);
 
 formCaptura.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -87,18 +83,22 @@ formCaptura.addEventListener("submit", (e) => {
 
   if (!(nombreOk && correoOk && passwordOk)) return;
 
-  // "Guardar": lo agregamos a la tabla en pantalla (no hay backend real).
-  const fila = document.createElement("tr");
-  fila.innerHTML = `<td>${nombre}</td><td>${correo}</td>`;
-  tablaUsuarios.appendChild(fila);
+  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+  if (usuarios.some((u) => u.correo === correo)) {
+    document.getElementById("errorCapCorreo").textContent = "Ese correo ya está registrado.";
+    return;
+  }
+
+  usuarios.push({ nombre, correo, password });
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+  agregarFilaUsuario(nombre, correo);
 
   exito.textContent = "Usuario guardado correctamente.";
   formCaptura.reset();
 });
 
-/* ===================================================================== */
-/*  Alumnos — número de control (validarLongitud) + modal de edad          */
-/* ===================================================================== */
 
 const formAlumno = document.getElementById("formAlumno");
 const tablaAlumnos = document.querySelector("#tablaAlumnos tbody");
@@ -112,9 +112,6 @@ formAlumno.addEventListener("submit", (e) => {
   const fecha = document.getElementById("alFecha").value;
 
   const controlDigitos = controlInput.replace(/\D/g, "");
-  // validarLongitud(numero, 6) confirma que no excede 6 dígitos; exigimos
-  // además que sean exactamente 6, ya que un número de control real tiene
-  // una longitud fija.
   const controlOk = validarLongitud(controlDigitos, 6) && controlDigitos.length === 6;
   const nombreOk = soloLetras(nombre);
   const fechaOk = fecha !== "" && !isNaN(calcularEdad(fecha));
@@ -128,12 +125,14 @@ formAlumno.addEventListener("submit", (e) => {
   const edad = calcularEdad(fecha);
   const mayor = esMayorDeEdad(fecha);
 
-  // Tabla en pantalla.
   const fila = document.createElement("tr");
-  fila.innerHTML = `<td>${nombre}</td><td>${controlDigitos}</td><td>${edad}</td>`;
+  [nombre, controlDigitos, edad].forEach((valor) => {
+    const td = document.createElement("td");
+    td.textContent = valor;
+    fila.appendChild(td);
+  });
   tablaAlumnos.appendChild(fila);
 
-  // Modal de edad.
   document.getElementById("modalEdadNombre").textContent = nombre;
   document.getElementById("modalEdadNumero").textContent = edad;
   const badge = document.getElementById("modalEdadBadge");
