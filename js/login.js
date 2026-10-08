@@ -19,17 +19,14 @@ function iniciarSesion() {
     return;
   }
   if (!validarPassword(password)) {
-    mensaje.textContent =
-      "La contraseña debe tener mayúscula, minúscula, número, carácter especial y 8+ caracteres.";
+    mensaje.textContent = "La contraseña debe tener mayúscula, minúscula, número, carácter especial y 8+ caracteres.";
     return;
   }
 
-  const existe = obtenerUsuarios().find(
-    (u) => u.correo === correo && u.password === password
-  );
+  const existe = obtenerUsuarios().find((u) => u.correo === correo && u.password === password);
 
   if (existe) {
-    localStorage.setItem("usuario", correo);
+    localStorage.setItem("usuario", existe.nombre);
     window.location.href = "index.html";
   } else {
     mensaje.textContent = "El correo o la contraseña son incorrectos.";
