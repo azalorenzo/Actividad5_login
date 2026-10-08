@@ -144,105 +144,108 @@ En `index.html`, el navbar tiene un botón desplegable con `id="usuarioNavbar"`.
 ## 5. Proceso de creación paso a paso
 
 ### Paso 1 — Login (`login.html` + `css/login.css` + `js/login.js`)
- 
+
 Se creó la pantalla de login con una tarjeta centrada, el logo, los campos de correo y contraseña, y un `<label id="mensaje">` para mostrar los errores. El formulario llama a `iniciarSesion()` al enviarse.
- 
+![Paso 1](capturas/login.png)
+
 ### Paso 2 — Librería de validaciones (`js/utileria.js`)
- 
+
 Se escribieron las funciones `validarCorreo()`, `validarPassword()`, `soloLetras()`, `validarLongitud()`, `calcularEdad()` y `esMayorDeEdad()`. Se cargan antes de `login.js` e `index.js` para poder reutilizarlas en ambas pantallas.
- 
+![Paso 1](capturas/utileria.png)
+
 ### Paso 3 — Lógica del login (`js/login.js`)
- 
+
 `iniciarSesion()` valida el formato del correo y de la contraseña, busca la coincidencia en `localStorage["usuarios"]` (junto con el usuario de prueba) y, si es correcta, guarda la sesión en `localStorage["usuario"]` y redirige a `index.html`.
- 
+![Paso 1](capturas/login-js.png)
+
 ### Paso 4 — Estructura del sistema (`index.html`)
- 
+
 Se armó el navbar con el botón hamburguesa, el logo y el menú desplegable del usuario; la sidebar con Inicio, Usuarios (submenú Captura) y Alumnos; y las tres vistas (`vista-inicio`, `vista-captura`, `vista-alumnos`), además del modal de edad.
- 
+
 ### Paso 5 — Estilos del sistema (`css/index.css`)
- 
+
 Se definió el layout con `flex`, la sidebar de 240 px, la clase `sidebar-cerrada` que la oculta con `margin-left: -240px`, y el comportamiento flotante en pantallas de 768 px o menos.
- 
+
 ### Paso 6 — Sesión, sidebar y vistas (`js/index.js`)
- 
+
 Se agregó la comprobación de sesión (con redirección al login si no existe), el botón que abre y cierra la sidebar, y `mostrarVista()` para alternar entre secciones usando `data-vista`.
- 
+
 ### Paso 7 — Captura de usuarios
- 
+
 El formulario valida nombre, correo y contraseña con `utileria.js`, evita correos repetidos, guarda el usuario en `localStorage["usuarios"]` y lo muestra en la tabla. Al cargar la página, la tabla se reconstruye con los usuarios guardados.
- 
+
 ### Paso 8 — Registro de alumnos y modal de edad
- 
+
 El formulario valida nombre, número de control (exactamente 6 dígitos) y fecha de nacimiento. Calcula la edad con `calcularEdad()`, agrega al alumno a la tabla y abre el modal con la edad y un badge verde (mayor de edad) o rojo (menor de edad).
- 
+
 ### Paso 9 — Pruebas y publicación
- 
+
 Se probó todo el flujo desde `http://localhost/Actividad5_login/login.html` con XAMPP (abrir los archivos con doble clic usa `file://` y rompe `localStorage`). Después se subió el proyecto a GitHub y se publicó con GitHub Pages.
- 
+
 ---
- 
+
 ## 6. Capturas del flujo completo funcionando
- 
+
 ### 6.1 Login vacío
- 
+
 ![Login vacío](capturas/Captura%20de%20pantalla%202026-10-07%20230642.png)
- 
+
 ### 6.2 Errores de validación en el login
- 
+
 ![Errores de validación](capturas/Captura%20de%20pantalla%202026-10-07%20230744.png)
- 
+
 ### 6.3 Credenciales incorrectas
- 
+
 ![Credenciales incorrectas](capturas/Captura%20de%20pantalla%202026-10-07%20230854.png)
- 
+
 ### 6.4 Login correcto: pantalla de Inicio con el usuario en el navbar
- 
+
 ![Inicio con usuario](capturas/Captura%20de%20pantalla%202026-10-07%20230911.png)
- 
+
 ### 6.5 Sidebar abierta
- 
+
 ![Sidebar abierta](capturas/Captura%20de%20pantalla%202026-10-07%20230922.png)
- 
+
 ### 6.6 Sidebar cerrada
- 
+
 ![Sidebar cerrada](capturas/Captura%20de%20pantalla%202026-10-07%20230932.png)
- 
+
 ### 6.7 Usuarios > Captura con errores de validación
- 
+
 ![Captura con errores](capturas/Captura%20de%20pantalla%202026-10-07%20230959.png)
- 
+
 ### 6.8 Usuario guardado correctamente
- 
+
 ![Usuario guardado](capturas/Captura%20de%20pantalla%202026-10-07%20231119.png)
- 
+
 ### 6.9 Persistencia: tabla de usuarios después de recargar la página
- 
+
 ![Persistencia de usuarios](capturas/Captura%20de%20pantalla%202026-10-07%20231148.png)
- 
+
 ### 6.10 Alumnos con errores de validación
- 
+
 ![Alumnos con errores](capturas/Captura%20de%20pantalla%202026-10-07%20231224.png)
- 
+
 ### 6.11 Modal de edad: mayor de edad
- 
+
 ![Modal mayor de edad](capturas/Captura%20de%20pantalla%202026-10-07%20231248.png)
- 
+
 ### 6.12 Modal de edad: menor de edad
- 
+
 ![Modal menor de edad](capturas/Captura%20de%20pantalla%202026-10-07%20231659.png)
- 
+
 ### 6.13 Tabla de alumnos con varios registros
- 
+
 ![Tabla de alumnos](capturas/Captura%20de%20pantalla%202026-10-07%20231723.png)
- 
+
 ### 6.14 Cerrar sesión y login con el usuario recién creado
- 
+
 ![Cerrar sesión](capturas/Captura%20de%20pantalla%202026-10-07%20231732.png)
- 
+
 ![Login con usuario nuevo](capturas/Captura%20de%20pantalla%202026-10-07%20231814.png)
- 
+
 ### 6.15 Acceso protegido: abrir `index.html` sin sesión redirige al login
- 
+
 ![Acceso sin sesión](capturas/Captura%20de%20pantalla%202026-10-07%20231822.png)
- 
+
 ---
