@@ -18,9 +18,7 @@ btnMenu.addEventListener("click", () => {
   btnMenu.setAttribute("aria-expanded", String(!cerrada));
 });
 
-if (window.matchMedia("(max-width: 768px)").matches) {
-  document.body.classList.add("sidebar-cerrada");
-}
+document.body.classList.add("sidebar-cerrada");
 
 const enlacesVista = document.querySelectorAll(".enlace-vista");
 const vistas = document.querySelectorAll(".vista");
@@ -57,9 +55,7 @@ function agregarFilaUsuario(nombre, correo) {
   tablaUsuarios.appendChild(fila);
 }
 
-(JSON.parse(localStorage.getItem("usuarios")) || []).forEach((u) =>
-  agregarFilaUsuario(u.nombre, u.correo)
-);
+(JSON.parse(localStorage.getItem("usuarios")) || []).forEach((u) => agregarFilaUsuario(u.nombre, u.correo));
 
 formCaptura.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -98,7 +94,6 @@ formCaptura.addEventListener("submit", (e) => {
   exito.textContent = "Usuario guardado correctamente.";
   formCaptura.reset();
 });
-
 
 const formAlumno = document.getElementById("formAlumno");
 const tablaAlumnos = document.querySelector("#tablaAlumnos tbody");
